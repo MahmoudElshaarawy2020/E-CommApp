@@ -1,11 +1,11 @@
-package com.example.e_commapp.presentation.login
+package com.example.e_commapp.presentation.register
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,21 +13,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -36,17 +31,13 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.e_commapp.R
 import com.example.e_commapp.presentation.utils.CustomTextField
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(
-    modifier: Modifier = Modifier
-) {
+fun RegisterScreen(modifier: Modifier = Modifier) {
 
     //Adding font family
     val poppinsFamily = FontFamily(
@@ -56,19 +47,33 @@ fun LoginScreen(
         Font(R.font.poppins_bold)
     )
 
+    var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordAgain by remember { mutableStateOf("") }
+    var isFullNameFocused by remember { mutableStateOf(false) }
     var isEmailFocused by remember { mutableStateOf(false) }
+    var isPasswordAgainFocused by remember { mutableStateOf(false) }
     var isPasswordFocused by remember { mutableStateOf(false) }
-    val errorMessage = stringResource(id = R.string.login_error_message)
-    var isError by remember { mutableStateOf(false) }
+    var passwordErrorMessage =  R.string.password_does_not_match
+    var emailErrorMessage =  R.string.invalid_email
+    var isFullNameError by remember { mutableStateOf(false) }
+    var isEmailError by remember { mutableStateOf(false) }
+    var isPasswordError by remember { mutableStateOf(false) }
+    var isPasswordAgainError by remember { mutableStateOf(false) }
+
+//    LaunchedEffect(email, password, passwordAgain, fullName) {
+//        isEmailError = email.isEmpty()
+//        isPasswordError = password.isEmpty()
+//        isPasswordAgainError = passwordAgain.isEmpty() || passwordAgain != password
+//    }
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Center
     ) {
         Image(
             modifier = modifier
@@ -79,7 +84,7 @@ fun LoginScreen(
         )
 
         Text(
-            text = stringResource(id = R.string.Welcome),
+            text = stringResource(id = R.string.lets_get_started),
             fontSize = 16.sp,
             fontWeight = FontWeight.ExtraBold,
             color = colorResource(id = R.color.Dark_blue),
@@ -88,7 +93,7 @@ fun LoginScreen(
         )
         Spacer(modifier = modifier.size(8.dp))
         Text(
-            text = stringResource(id = R.string.Sign_in_to_continue),
+            text = stringResource(id = R.string.create_new_account),
             fontSize = 12.sp,
             fontWeight = FontWeight.W400,
             color = colorResource(id = R.color.light_grey),
@@ -97,7 +102,21 @@ fun LoginScreen(
         )
         Spacer(modifier = modifier.size(28.dp))
         CustomTextField(
-            isError = isError,
+            isError = isFullNameError,
+            value = fullName,
+            label = stringResource(id = R.string.full_name),
+            onValueChange = { fullName = it },
+            isFocused = isFullNameFocused,
+            focusedBorderColor = colorResource(id = R.color.light_blue),
+            unfocusedBorderColor = colorResource(id = R.color.lighter_grey),
+            cursorColor = colorResource(id = R.color.light_grey),
+            leadingIcon = R.drawable.user_ic
+        )
+
+        Spacer(modifier = modifier.size(8.dp))
+        CustomTextField(
+            isError = isEmailError,
+            errorMessage = stringResource(id = emailErrorMessage),
             value = email,
             label = stringResource(id = R.string.your_email),
             onValueChange = { email = it },
@@ -110,13 +129,29 @@ fun LoginScreen(
 
         Spacer(modifier = modifier.size(8.dp))
         CustomTextField(
-            isError = isError,
-            errorMessage = errorMessage,
+            isError = isPasswordError,
+            errorMessage = stringResource(id = passwordErrorMessage),
             value = password,
             label = stringResource(id = R.string.password),
             isPassword = true,
+            isEncrypted = true,
             onValueChange = { password = it },
             isFocused = isPasswordFocused,
+            focusedBorderColor = colorResource(id = R.color.light_blue),
+            unfocusedBorderColor = colorResource(id = R.color.lighter_grey),
+            cursorColor = colorResource(id = R.color.light_grey),
+            leadingIcon = R.drawable.password_ic
+        )
+
+        Spacer(modifier = modifier.size(8.dp))
+        CustomTextField(
+            isError = isPasswordError,
+            errorMessage = stringResource(id = passwordErrorMessage),
+            value = passwordAgain,
+            label = stringResource(id = R.string.password_again),
+            isEncrypted = true,
+            onValueChange = { passwordAgain = it },
+            isFocused = isPasswordAgainFocused,
             focusedBorderColor = colorResource(id = R.color.light_blue),
             unfocusedBorderColor = colorResource(id = R.color.lighter_grey),
             cursorColor = colorResource(id = R.color.light_grey),
@@ -130,13 +165,34 @@ fun LoginScreen(
             colors = ButtonDefaults.buttonColors(colorResource(id = R.color.light_blue)),
             shape = RoundedCornerShape(8.dp),
             onClick = {
-                if (email.isEmpty() || password.isEmpty()) {
-                    isError = true
+//                if (email.isEmpty() || password.isEmpty() || passwordAgain.isEmpty() || fullName.isEmpty()) {
+//                    isError = true
+//                }else if (password != passwordAgain){
+//                    isError = true
+//                    passwordErrorMessage =  R.string.password_does_not_match
+//                }else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+//                    isError = true
+//                    emailErrorMessage =  R.string.invalid_email
+//                }
+                when {
+                    fullName.isEmpty() -> {
+                        isFullNameError = true
+                    }
+                    email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                        isEmailError = true
                 }
+                    password.isEmpty() -> {
+                        passwordErrorMessage =  R.string.password_does_not_match
+                        isPasswordError = true
+                    }
+                    passwordAgain.isEmpty() || password != passwordAgain -> {
+                        isPasswordAgainError = true
+                    }
+            }
             }
         ) {
             Text(
-                text = stringResource(id = R.string.Sign_in),
+                text = stringResource(id = R.string.Sign_up),
                 fontFamily = poppinsFamily,
                 fontWeight = FontWeight.ExtraBold,
                 color = colorResource(id = R.color.white),
@@ -144,118 +200,14 @@ fun LoginScreen(
                 lineHeight = 25.sp
             )
         }
-        Spacer(modifier = modifier.size(21.dp))
-        Box(
-            modifier = modifier
-                .size(width = 340.dp, height = 24.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Divider(
-                color = Color.LightGray,
-                thickness = 1.dp,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Text(
-                modifier = Modifier
-                    .background(Color.White)
-                    .width(50.dp),
-                textAlign = TextAlign.Center,
-                text = stringResource(id = R.string.or),
-                color = colorResource(id = R.color.light_grey),
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = poppinsFamily,
-            )
-        }
-
-        Spacer(modifier = modifier.size(21.dp))
-        Button(
-            modifier = modifier
-                .size(width = 343.dp, height = 57.dp)
-                .border(1.dp, colorResource(id = R.color.lighter_grey), RoundedCornerShape(8.dp)),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-            shape = RoundedCornerShape(8.dp),
-            onClick = {},
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.google_ic),
-                    contentDescription = "Google Icon",
-                    tint = Color.Unspecified,
-                    modifier = Modifier.size(24.dp)
-                )
-
-                Text(
-                    modifier = Modifier.width(277.dp),
-                    text = stringResource(id = R.string.Login_with_Google),
-                    fontFamily = poppinsFamily,
-                    fontWeight = FontWeight.ExtraBold,
-                    textAlign = TextAlign.Center,
-                    color = colorResource(id = R.color.light_grey),
-                    fontSize = 14.sp,
-                    lineHeight = 25.sp
-                )
-            }
-        }
-
-
-        Spacer(modifier = modifier.size(16.dp))
-
-        Button(
-            modifier = modifier
-                .size(width = 343.dp, height = 57.dp)
-                .border(1.dp, colorResource(id = R.color.lighter_grey), RoundedCornerShape(8.dp)),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-            shape = RoundedCornerShape(8.dp),
-            onClick = {}
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.facebook_ic),
-                    contentDescription = "Google Icon",
-                    tint = Color.Unspecified,
-                    modifier = Modifier.size(24.dp)
-                )
-
-                Text(
-                    modifier = Modifier.width(277.dp),
-                    text = stringResource(id = R.string.Login_with_facebook),
-                    fontFamily = poppinsFamily,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = colorResource(id = R.color.light_grey),
-                    textAlign = TextAlign.Center,
-                    fontSize = 14.sp,
-                    lineHeight = 25.sp
-                )
-            }
-        }
-        Spacer(modifier = modifier.size(16.dp))
-        Text(
-            modifier = modifier.clickable { },
-            text = stringResource(id = R.string.forgot_password),
-            fontFamily = poppinsFamily,
-            fontWeight = FontWeight.ExtraBold,
-            color = colorResource(id = R.color.light_blue),
-            textAlign = TextAlign.Center,
-            fontSize = 12.sp,
-            lineHeight = 18.sp
-        )
-
-        Spacer(modifier = modifier.size(8.dp))
+        Spacer(modifier = modifier.size(25.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(id = R.string.do_not_have_account),
+                text = stringResource(id = R.string.have_an_account),
                 fontFamily = poppinsFamily,
                 fontWeight = FontWeight.Light,
                 color = colorResource(id = R.color.light_grey),
@@ -266,7 +218,7 @@ fun LoginScreen(
 
             Text(
                 modifier = modifier.clickable { },
-                text = stringResource(id = R.string.register),
+                text = stringResource(id = R.string.Sign_in),
                 fontFamily = poppinsFamily,
                 fontWeight = FontWeight.ExtraBold,
                 color = colorResource(id = R.color.light_blue),
@@ -275,11 +227,8 @@ fun LoginScreen(
                 lineHeight = 18.sp
             )
         }
+        
+        Spacer(modifier = modifier.size(150.dp))
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-private fun LoginScreenPreview() {
-    LoginScreen()
 }

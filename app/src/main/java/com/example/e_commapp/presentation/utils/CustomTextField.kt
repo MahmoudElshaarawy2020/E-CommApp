@@ -20,9 +20,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.e_commapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,6 +39,7 @@ fun CustomTextField(
     onValueChange: (String) -> Unit,
     textStyle: TextStyle = TextStyle.Default,
     textColor: Color = colorResource(id = R.color.light_grey),
+    label: String = "",
     focusedBorderColor: Color,
     unfocusedBorderColor: Color,
     cursorColor: Color,
@@ -40,16 +47,36 @@ fun CustomTextField(
     isFocused: Boolean,
     maxLines: Int = 1,
     isPassword: Boolean = false,
+    isEncrypted: Boolean = false,
     isError: Boolean = false,
     errorMessage: String = ""
 ) {
 
+    //Adding font family
+    val poppinsFamily = FontFamily(
+        Font(R.font.poppins_regular),
+        Font(R.font.poppins_medium),
+        Font(R.font.poppins_semibold),
+        Font(R.font.poppins_bold)
+    )
+
     var isFieldFocused by remember { mutableStateOf(isFocused) }
+
+    val passwordPattern = Regex("^(?=.*[A-Z])(?=.*[@#\$%^&+=!]).{8,}$")
+
+    val actualErrorMessage = when {
+        isPassword && value.isNotEmpty() && !value.matches(passwordPattern) ->
+            "Password must be 8+ chars, \n include 1 uppercase & 1 special char"
+        isError -> errorMessage
+        else -> ""
+    }
+
+    val hasError = actualErrorMessage.isNotEmpty()
 
     Column {
         OutlinedTextField(
             modifier = modifier
-                .size(width = 343.dp, height = 48.dp)
+                .size(width = 343.dp, height = 56.dp)
                 .onFocusChanged { focusState -> isFieldFocused = focusState.isFocused },
             value = value,
             onValueChange = onValueChange,
@@ -57,10 +84,10 @@ fun CustomTextField(
             textStyle = textStyle.copy(
                 color = textColor
             ),
-            visualTransformation = if (!isPassword) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (!isEncrypted) VisualTransformation.None else PasswordVisualTransformation(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = if (isError) Color.Red else focusedBorderColor,
-                unfocusedBorderColor = if (isError) Color.Red else unfocusedBorderColor,
+                focusedBorderColor = if (hasError) Color.Red else focusedBorderColor,
+                unfocusedBorderColor = if (hasError) Color.Red else unfocusedBorderColor,
                 cursorColor = cursorColor
             ),
             leadingIcon = {
@@ -68,22 +95,30 @@ fun CustomTextField(
                     modifier = modifier
                         .size(24.dp),
                     painter = painterResource(id = leadingIcon),
-                    contentDescription = "Person Icon",
-                    tint = if (isFieldFocused){
-                        colorResource(id = R.color.light_blue)
-                    } else if(isError){
-                        Color.Red
-                    }else{
-                        colorResource(id = R.color.light_grey)
+                    contentDescription = "Icon",
+                    tint = when {
+                        hasError -> Color.Red
+                        isFieldFocused -> colorResource(id = R.color.light_blue)
+                        else -> colorResource(id = R.color.light_grey)
                     }
                 )
             },
-            isError = isError
+            isError = hasError,
+            label = {
+                Text(
+                    text = label,
+                    fontFamily = poppinsFamily,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center,
+                    color = colorResource(id = R.color.light_grey),
+                    fontSize = 12.sp,
+                    lineHeight = 21.sp)
+            }
         )
 
-        if (isError) {
+        if (hasError) {
             Text(
-                text = errorMessage,
+                text = actualErrorMessage,
                 color = Color.Red,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(start = 16.dp, top = 4.dp)

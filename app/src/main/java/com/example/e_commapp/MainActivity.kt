@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.e_commapp.presentation.login.LoginScreen
+import com.example.e_commapp.presentation.register.RegisterScreen
 import com.example.e_commapp.ui.theme.ECommAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ECommAppTheme {
-                    LoginScreen()
+                    RegisterScreen()
                 }
             }
         }

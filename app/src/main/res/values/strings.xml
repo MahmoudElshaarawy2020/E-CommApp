@@ -3,13 +3,25 @@
     <string name="Welcome">Welcome to E-com</string>
     <string name="Sign_in_to_continue">Sign in to continue</string>
     <string name="Sign_in">Sign In</string>
+    <string name="Sign_up">Sign Up</string>
+    <string name="your_email">Your Email</string>
+    <string name="create_new_account">Create a new account</string>
+    <string name="password">Password</string>
     <string name="or">OR</string>
+    <string name="lets_get_started">Let\'s get started</string>
+    <string name="full_name">Full name</string>
+    <string name="password_again">Password Again</string>
     <string name="Login_with_Google">Login with Google</string>
     <string name="Login_with_facebook">Login with facebook</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="do_not_have_account">Don’t have a account? </string>
+    <string name="do_not_have_account">Don\’t have an account? </string>
+    <string name="have_an_account">have an account? </string>
     <string name="register"> Register</string>
-    <string name="error_message"> Oops! invalid login</string>
+    <string name="login_error_message"> Oops! invalid login</string>
+    <string name="register_error_message"> Oops! invalid registration</string>
+    <string name="password_does_not_match"> Password does not match</string>
+    <string name="password_can_not_be_empty"> Password can\'t be empty</string>
+    <string name="invalid_email"> Invalid Email</string>
 
 
 </resources>
