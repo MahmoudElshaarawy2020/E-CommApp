@@ -139,7 +139,7 @@ fun RegisterScreen(
         Spacer(modifier = modifier.size(8.dp))
         CustomTextField(
             isError = isPasswordError,
-            errorMessage = stringResource(id = passwordErrorMessage),
+            errorMessage = passwordErrorMessage?.let { stringResource(id = it) } ?: "",
             value = password,
             label = stringResource(id = R.string.password),
             isPassword = true,
@@ -155,7 +155,7 @@ fun RegisterScreen(
         Spacer(modifier = modifier.size(8.dp))
         CustomTextField(
             isError = isPasswordAgainError,
-            errorMessage = stringResource(id = passwordErrorMessage),
+            errorMessage = passwordErrorMessage?.let { stringResource(id = it) } ?: "",
             value = passwordAgain,
             label = stringResource(id = R.string.password_again),
             isEncrypted = true,

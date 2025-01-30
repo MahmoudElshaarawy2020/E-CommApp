@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import android.util.Patterns
-import android.widget.Toast
 import com.example.e_commapp.R
 
 class RegisterViewModel : ViewModel() {
@@ -33,8 +32,8 @@ class RegisterViewModel : ViewModel() {
     private val _isPasswordAgainError = MutableStateFlow(false)
     var isPasswordAgainError = _isPasswordAgainError.asStateFlow()
 
-    private val _passwordErrorMessage = MutableStateFlow(R.string.password_does_not_match)
-    var passwordErrorMessage = _passwordErrorMessage.asStateFlow()
+    private val _passwordErrorMessage = MutableStateFlow<Int?>(null)
+    val passwordErrorMessage = _passwordErrorMessage.asStateFlow()
 
     fun onFullNameChange(newFullName: String) {
         _fullName.value = newFullName
