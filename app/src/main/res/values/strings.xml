@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">E-Comm App</string>
+    <string name="Welcome">Welcome to E-com</string>
+    <string name="Sign_in_to_continue">Sign in to continue</string>
+    <string name="Sign_in">Sign In</string>
+    <string name="or">OR</string>
+    <string name="Login_with_Google">Login with Google</string>
+    <string name="Login_with_facebook">Login with facebook</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="do_not_have_account">Don’t have a account? </string>
+    <string name="register"> Register</string>
+    <string name="error_message"> Oops! invalid login</string>
+
+
+</resources>
