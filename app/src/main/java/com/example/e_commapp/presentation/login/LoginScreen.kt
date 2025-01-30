@@ -39,12 +39,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.e_commapp.R
 import com.example.e_commapp.presentation.utils.CustomTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
+    navController: NavHostController,
+    onRegisterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -265,7 +268,9 @@ fun LoginScreen(
             )
 
             Text(
-                modifier = modifier.clickable { },
+                modifier = modifier.clickable {
+                    onRegisterClick()
+                },
                 text = stringResource(id = R.string.register),
                 fontFamily = poppinsFamily,
                 fontWeight = FontWeight.ExtraBold,
@@ -278,8 +283,3 @@ fun LoginScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun LoginScreenPreview() {
-    LoginScreen()
-}
