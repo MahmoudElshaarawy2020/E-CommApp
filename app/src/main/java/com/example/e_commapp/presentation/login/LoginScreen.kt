@@ -120,6 +120,7 @@ fun LoginScreen(
             value = password,
             label = stringResource(id = R.string.password),
             isPassword = true,
+            isEncrypted = true,
             onValueChange = { viewModel.onPasswordChange(it) },
             isFocused = isPasswordFocused,
             focusedBorderColor = colorResource(id = R.color.light_blue),
