@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,7 +44,8 @@ import com.example.e_commapp.presentation.utils.CustomTextField
 fun RegisterScreen(
     navController: NavHostController,
     onLoginClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: RegisterViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
 
     //Adding font family
@@ -54,21 +56,20 @@ fun RegisterScreen(
         Font(R.font.poppins_bold)
     )
 
-    val context = LocalContext.current
-    var fullName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordAgain by remember { mutableStateOf("") }
+    val fullName by viewModel.fullName.collectAsState()
+    val email by viewModel.email.collectAsState()
+    val password by viewModel.password.collectAsState()
+    val passwordAgain by viewModel.passwordAgain.collectAsState()
     var isFullNameFocused by remember { mutableStateOf(false) }
     var isEmailFocused by remember { mutableStateOf(false) }
     var isPasswordAgainFocused by remember { mutableStateOf(false) }
     var isPasswordFocused by remember { mutableStateOf(false) }
-    var passwordErrorMessage =  R.string.password_does_not_match
+    val passwordErrorMessage by viewModel.passwordErrorMessage.collectAsState()
     var emailErrorMessage =  R.string.invalid_email
-    var isFullNameError by remember { mutableStateOf(false) }
-    var isEmailError by remember { mutableStateOf(false) }
-    var isPasswordError by remember { mutableStateOf(false) }
-    var isPasswordAgainError by remember { mutableStateOf(false) }
+    val isFullNameError by viewModel.isFullNameError.collectAsState()
+    val isEmailError by viewModel.isEmailError.collectAsState()
+    val isPasswordError by viewModel.isPasswordError.collectAsState()
+    val isPasswordAgainError by viewModel.isPasswordAgainError.collectAsState()
 
 //    LaunchedEffect(email, password, passwordAgain, fullName) {
 //        isEmailError = email.isEmpty()
@@ -113,7 +114,7 @@ fun RegisterScreen(
             isError = isFullNameError,
             value = fullName,
             label = stringResource(id = R.string.full_name),
-            onValueChange = { fullName = it },
+            onValueChange = { viewModel.onFullNameChange(it) },
             isFocused = isFullNameFocused,
             focusedBorderColor = colorResource(id = R.color.light_blue),
             unfocusedBorderColor = colorResource(id = R.color.lighter_grey),
@@ -127,7 +128,7 @@ fun RegisterScreen(
             errorMessage = stringResource(id = emailErrorMessage),
             value = email,
             label = stringResource(id = R.string.your_email),
-            onValueChange = { email = it },
+            onValueChange = { viewModel.onEmailChange(it) },
             isFocused = isEmailFocused,
             focusedBorderColor = colorResource(id = R.color.light_blue),
             unfocusedBorderColor = colorResource(id = R.color.lighter_grey),
@@ -143,7 +144,7 @@ fun RegisterScreen(
             label = stringResource(id = R.string.password),
             isPassword = true,
             isEncrypted = true,
-            onValueChange = { password = it },
+            onValueChange = { viewModel.onPasswordChange(it) },
             isFocused = isPasswordFocused,
             focusedBorderColor = colorResource(id = R.color.light_blue),
             unfocusedBorderColor = colorResource(id = R.color.lighter_grey),
@@ -158,7 +159,7 @@ fun RegisterScreen(
             value = passwordAgain,
             label = stringResource(id = R.string.password_again),
             isEncrypted = true,
-            onValueChange = { passwordAgain = it },
+            onValueChange = { viewModel.onPasswordAgainChange(it) },
             isFocused = isPasswordAgainFocused,
             focusedBorderColor = colorResource(id = R.color.light_blue),
             unfocusedBorderColor = colorResource(id = R.color.lighter_grey),
@@ -182,33 +183,7 @@ fun RegisterScreen(
 //                    isError = true
 //                    emailErrorMessage =  R.string.invalid_email
 //                }
-                when {
-                    fullName.isEmpty() -> {
-                        isFullNameError = true
-                    }
-                    email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                        isEmailError = true
-
-                    }
-                    password.isEmpty() -> {
-                        passwordErrorMessage =  R.string.password_does_not_match
-                        isPasswordError = true
-                    }
-                    passwordAgain.isEmpty() -> {
-                        isPasswordAgainError = true
-                        passwordErrorMessage =  R.string.password_does_not_match
-                    }
-                    password != passwordAgain -> {
-                        isPasswordAgainError = true
-                        passwordErrorMessage =  R.string.password_does_not_match
-                    }
-                    password == passwordAgain -> {
-                        isPasswordAgainError = false
-                    }
-                    fullName.isEmpty() && email.isEmpty() && password.isEmpty() && passwordAgain.isEmpty() -> {
-                        Toast.makeText(context, "Please enter valid data", Toast.LENGTH_SHORT).show()
-                    }
-            }
+                    viewModel.register()
             }
         ) {
             Text(
