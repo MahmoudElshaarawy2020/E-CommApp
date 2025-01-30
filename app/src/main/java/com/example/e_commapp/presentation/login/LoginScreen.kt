@@ -22,6 +22,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,7 +49,8 @@ import com.example.e_commapp.presentation.utils.CustomTextField
 fun LoginScreen(
     navController: NavHostController,
     onRegisterClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
 
     //Adding font family
@@ -59,12 +61,12 @@ fun LoginScreen(
         Font(R.font.poppins_bold)
     )
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val email by viewModel.email.collectAsState()
+    val password by viewModel.password.collectAsState()
     var isEmailFocused by remember { mutableStateOf(false) }
     var isPasswordFocused by remember { mutableStateOf(false) }
     val errorMessage = stringResource(id = R.string.login_error_message)
-    var isError by remember { mutableStateOf(false) }
+    val isError by viewModel.isError.collectAsState()
 
     Column(
         modifier = modifier
@@ -103,7 +105,7 @@ fun LoginScreen(
             isError = isError,
             value = email,
             label = stringResource(id = R.string.your_email),
-            onValueChange = { email = it },
+            onValueChange = { viewModel.onEmailChange(it) },
             isFocused = isEmailFocused,
             focusedBorderColor = colorResource(id = R.color.light_blue),
             unfocusedBorderColor = colorResource(id = R.color.lighter_grey),
@@ -118,7 +120,7 @@ fun LoginScreen(
             value = password,
             label = stringResource(id = R.string.password),
             isPassword = true,
-            onValueChange = { password = it },
+            onValueChange = { viewModel.onPasswordChange(it) },
             isFocused = isPasswordFocused,
             focusedBorderColor = colorResource(id = R.color.light_blue),
             unfocusedBorderColor = colorResource(id = R.color.lighter_grey),
@@ -133,9 +135,7 @@ fun LoginScreen(
             colors = ButtonDefaults.buttonColors(colorResource(id = R.color.light_blue)),
             shape = RoundedCornerShape(8.dp),
             onClick = {
-                if (email.isEmpty() || password.isEmpty()) {
-                    isError = true
-                }
+                viewModel.onLoginClick()
             }
         ) {
             Text(
