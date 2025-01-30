@@ -153,7 +153,7 @@ fun RegisterScreen(
 
         Spacer(modifier = modifier.size(8.dp))
         CustomTextField(
-            isError = isPasswordError,
+            isError = isPasswordAgainError,
             errorMessage = stringResource(id = passwordErrorMessage),
             value = passwordAgain,
             label = stringResource(id = R.string.password_again),
@@ -188,18 +188,26 @@ fun RegisterScreen(
                     }
                     email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
                         isEmailError = true
-                }
+
+                    }
                     password.isEmpty() -> {
                         passwordErrorMessage =  R.string.password_does_not_match
                         isPasswordError = true
                     }
-                    passwordAgain.isEmpty() || password != passwordAgain -> {
+                    passwordAgain.isEmpty() -> {
                         isPasswordAgainError = true
+                        passwordErrorMessage =  R.string.password_does_not_match
+                    }
+                    password != passwordAgain -> {
+                        isPasswordAgainError = true
+                        passwordErrorMessage =  R.string.password_does_not_match
+                    }
+                    password == passwordAgain -> {
+                        isPasswordAgainError = false
                     }
                     fullName.isEmpty() && email.isEmpty() && password.isEmpty() && passwordAgain.isEmpty() -> {
                         Toast.makeText(context, "Please enter valid data", Toast.LENGTH_SHORT).show()
                     }
-
             }
             }
         ) {
