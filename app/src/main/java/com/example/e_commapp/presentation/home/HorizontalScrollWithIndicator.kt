@@ -30,9 +30,11 @@ fun HorizontalScrollWithIndicator(items: List<Int>) {
 
     LaunchedEffect(key1 = currentIndex) {
         while (true) {
-            delay(3000)
-            val nextIndex = if (currentIndex == items.size - 1) 0 else (currentIndex + 1)
-            listState.animateScrollToItem(nextIndex)
+            for(i in items){
+                delay(3000)
+                val nextIndex = if (currentIndex == items.size - 1) 0 else (currentIndex + 1)
+                listState.animateScrollToItem(nextIndex)
+            }
         }
     }
 
