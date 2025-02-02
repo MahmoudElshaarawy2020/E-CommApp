@@ -23,6 +23,12 @@
     <string name="password_can_not_be_empty"> Password can\'t be empty</string>
     <string name="invalid_email"> Invalid Email</string>
     <string name="enter_valid_data"> please enter valid data</string>
+    <string name="search_product"> Search Product</string>
+    <string name="category"> Category</string>
+    <string name="More_category">More categories</string>
+    <string name="flash_sale">Flash Sale</string>
+    <string name="see_more">See More</string>
+    <string name="mega_sale">Mega Sale</string>
 
 
 </resources>

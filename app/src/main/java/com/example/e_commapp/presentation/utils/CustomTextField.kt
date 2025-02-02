@@ -49,6 +49,8 @@ fun CustomTextField(
     isPassword: Boolean = false,
     isEncrypted: Boolean = false,
     isError: Boolean = false,
+    width: Int = 343,
+    height: Int = 56,
     errorMessage: String = ""
 ) {
 
@@ -76,7 +78,7 @@ fun CustomTextField(
     Column {
         OutlinedTextField(
             modifier = modifier
-                .size(width = 343.dp, height = 56.dp)
+                .size(width = width.dp, height = height.dp)
                 .onFocusChanged { focusState -> isFieldFocused = focusState.isFocused },
             value = value,
             onValueChange = onValueChange,
