@@ -31,7 +31,9 @@ fun BottomNavigationBar(
                     Icon(
                         painter = painterResource(id = item.icon),
                         contentDescription = item.label,
-                        tint = if (selectedItem == index) colorResource(id = R.color.light_blue) else colorResource(id = R.color.light_grey)
+                        tint = if (selectedItem == index) colorResource(id = R.color.light_blue) else colorResource(
+                            id = R.color.light_grey
+                        )
                     )
                 },
                 label = {

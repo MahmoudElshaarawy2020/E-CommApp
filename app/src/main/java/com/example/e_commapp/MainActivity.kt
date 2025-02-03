@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.example.e_commapp.presentation.login.LoginScreen
 import com.example.e_commapp.navigation.AppNavigation
 import com.example.e_commapp.presentation.home.HomeScreen
@@ -25,7 +26,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ECommAppTheme {
-                    HomeScreen()
+                    val navController = rememberNavController()
+                    AppNavigation()
                 }
             }
         }

@@ -183,7 +183,11 @@ fun RegisterScreen(
 //                    isError = true
 //                    emailErrorMessage =  R.string.invalid_email
 //                }
-                    viewModel.register()
+                viewModel.register()
+                if(!isFullNameError && !isEmailError && !isPasswordError && !isPasswordAgainError){
+                    navController.navigate("home_screen")
+                }
+
             }
         ) {
             Text(

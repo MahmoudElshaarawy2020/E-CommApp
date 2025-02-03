@@ -23,7 +23,8 @@ class LoginViewModel : ViewModel() {
         _password.value = newPassword
     }
 
-    fun onLoginClick() {
+    fun onLoginClick(): Boolean {
         _isError.value = _email.value.isEmpty() || _password.value.isEmpty()
+        return !_isError.value
     }
 }

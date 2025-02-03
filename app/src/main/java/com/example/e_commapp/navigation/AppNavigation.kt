@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.e_commapp.presentation.home.HomeScreen
 import com.example.e_commapp.presentation.login.LoginScreen
 import com.example.e_commapp.presentation.register.RegisterScreen
 
@@ -26,6 +27,12 @@ fun AppNavigation() {
             RegisterScreen(
                 navController,
                 onLoginClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.Home.route) {
+            HomeScreen(
+                navController = navController
             )
         }
     }

@@ -136,7 +136,9 @@ fun LoginScreen(
             colors = ButtonDefaults.buttonColors(colorResource(id = R.color.light_blue)),
             shape = RoundedCornerShape(8.dp),
             onClick = {
-                viewModel.onLoginClick()
+                if (viewModel.onLoginClick()){
+                    navController.navigate("home_screen")
+                }
             }
         ) {
             Text(
