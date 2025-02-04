@@ -1,4 +1,4 @@
-package com.example.e_commapp.navigation
+package com.example.e_commapp.navigation.navigation_bar
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon

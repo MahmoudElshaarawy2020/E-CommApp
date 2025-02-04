@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -40,8 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.e_commapp.R
-import com.example.e_commapp.navigation.BottomNavItem
-import com.example.e_commapp.navigation.BottomNavigationBar
+import com.example.e_commapp.navigation.navigation_bar.BottomNavItem
+import com.example.e_commapp.navigation.navigation_bar.BottomNavigationBar
 import com.example.e_commapp.presentation.utils.CustomTextField
 import imageList
 
@@ -73,204 +72,194 @@ fun HomeScreen(
     var selectedItem by remember { mutableIntStateOf(0) }
 
 
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        bottomBar = {
-            BottomNavigationBar(
-                items = bottomNavItems,
-                selectedItem = selectedItem,
-                onItemSelected = { selectedItem = it }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+    ) {
+        Spacer(modifier = modifier.size(48.dp))
+
+        Row(
+            modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 16.dp),
+            verticalAlignment = CenterVertically,
+        ) {
+            CustomTextField(
+                width = 260,
+                height = 55,
+                label = stringResource(id = R.string.search_product),
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                focusedBorderColor = colorResource(id = R.color.light_blue),
+                unfocusedBorderColor = colorResource(id = R.color.lighter_grey),
+                cursorColor = colorResource(id = R.color.light_grey),
+                leadingIcon = R.drawable.search_ic,
+                isFocused = isFieldFocused
+            )
+            Spacer(modifier = modifier.size(20.dp))
+            Icon(
+                modifier = modifier.size(24.dp),
+                painter = painterResource(id = R.drawable.favorite_ic),
+                contentDescription = "Favorite",
+                tint = colorResource(id = R.color.light_grey)
+            )
+            Spacer(modifier = modifier.size(20.dp))
+            Icon(
+                modifier = modifier.size(24.dp),
+                painter = painterResource(id = R.drawable.notification),
+                contentDescription = "Notification",
+                tint = colorResource(id = R.color.light_grey)
             )
         }
-    ) {
-        Column(
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Divider(
+            color = Color.LightGray,
+            thickness = 1.dp,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        LazyColumn(
             modifier = modifier
                 .fillMaxSize()
-                .background(color = Color.White)
+                .padding(top = 16.dp)
         ) {
-            Spacer(modifier = modifier.size(48.dp))
-
-            Row(
-                modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 16.dp),
-                verticalAlignment = CenterVertically,
-            ) {
-                CustomTextField(
-                    width = 260,
-                    height = 55,
-                    label = stringResource(id = R.string.search_product),
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
-                    focusedBorderColor = colorResource(id = R.color.light_blue),
-                    unfocusedBorderColor = colorResource(id = R.color.lighter_grey),
-                    cursorColor = colorResource(id = R.color.light_grey),
-                    leadingIcon = R.drawable.search_ic,
-                    isFocused = isFieldFocused
-                )
-                Spacer(modifier = modifier.size(20.dp))
-                Icon(
-                    modifier = modifier.size(24.dp),
-                    painter = painterResource(id = R.drawable.favorite_ic),
-                    contentDescription = "Favorite",
-                    tint = colorResource(id = R.color.light_grey)
-                )
-                Spacer(modifier = modifier.size(20.dp))
-                Icon(
-                    modifier = modifier.size(24.dp),
-                    painter = painterResource(id = R.drawable.notification),
-                    contentDescription = "Notification",
-                    tint = colorResource(id = R.color.light_grey)
-                )
+            item {
+                HorizontalScrollWithIndicator(items = imageList)
             }
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            Divider(
-                color = Color.LightGray,
-                thickness = 1.dp,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(top = 16.dp)
-            ) {
-                item {
-                    HorizontalScrollWithIndicator(items = imageList)
-                }
-                item {
-                    Spacer(modifier = modifier.size(24.dp))
-                    Row(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.category),
-                            fontFamily = poppinsFamily,
-                            fontSize = 16.sp,
-                            color = Color.Black,
-                            lineHeight = 21.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-
-                        Text(
-                            text = stringResource(id = R.string.More_category),
-                            fontFamily = poppinsFamily,
-                            fontSize = 16.sp,
-                            color = colorResource(id = R.color.light_blue),
-                            lineHeight = 21.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-
-                    }
-                }
-                item {
-                    Spacer(modifier = modifier.size(16.dp))
-                    CategoryLazyRow()
-                }
-                item {
-                    Spacer(modifier = modifier.size(24.dp))
-                    Row(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.flash_sale),
-                            fontFamily = poppinsFamily,
-                            fontSize = 16.sp,
-                            color = Color.Black,
-                            lineHeight = 21.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-
-                        Text(
-                            text = stringResource(id = R.string.see_more),
-                            fontFamily = poppinsFamily,
-                            fontSize = 16.sp,
-                            color = colorResource(id = R.color.light_blue),
-                            lineHeight = 21.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                    }
-
-                    LazyRow(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        items(10) {
-                            ProductCard()
-                        }
-                    }
-                }
-                item {
-                    Spacer(modifier = modifier.size(24.dp))
-                    Row(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.mega_sale),
-                            fontFamily = poppinsFamily,
-                            fontSize = 16.sp,
-                            color = Color.Black,
-                            lineHeight = 21.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-
-                        Text(
-                            text = stringResource(id = R.string.see_more),
-                            fontFamily = poppinsFamily,
-                            fontSize = 16.sp,
-                            color = colorResource(id = R.color.light_blue),
-                            lineHeight = 21.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                    }
-
-                    LazyRow(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        items(10) {
-                            ProductCard()
-                        }
-                    }
-                    Spacer(modifier = modifier.size(16.dp))
-                }
-                item {
-                    Image(
-                        painter = painterResource(id = R.drawable.shoes_img),
-                        contentDescription = "Scroll image",
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .size(width = 390.dp, height = 220.dp)
+            item {
+                Spacer(modifier = modifier.size(24.dp))
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.category),
+                        fontFamily = poppinsFamily,
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        lineHeight = 21.sp,
+                        fontWeight = FontWeight.ExtraBold
                     )
-                    Spacer(modifier = modifier.size(16.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.More_category),
+                        fontFamily = poppinsFamily,
+                        fontSize = 16.sp,
+                        color = colorResource(id = R.color.light_blue),
+                        lineHeight = 21.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+
                 }
-                item {
-                    Spacer(modifier = modifier.size(16.dp))
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(600.dp)
-                            .padding(16.dp)
-                    ) {
-                        items(10) {
-                            ProductCard(modifier = Modifier.padding(8.dp))
-                        }
+            }
+            item {
+                Spacer(modifier = modifier.size(16.dp))
+                CategoryLazyRow()
+            }
+            item {
+                Spacer(modifier = modifier.size(24.dp))
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.flash_sale),
+                        fontFamily = poppinsFamily,
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        lineHeight = 21.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+
+                    Text(
+                        text = stringResource(id = R.string.see_more),
+                        fontFamily = poppinsFamily,
+                        fontSize = 16.sp,
+                        color = colorResource(id = R.color.light_blue),
+                        lineHeight = 21.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+
+                LazyRow(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(10) {
+                        ProductCard()
+                    }
+                }
+            }
+            item {
+                Spacer(modifier = modifier.size(24.dp))
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.mega_sale),
+                        fontFamily = poppinsFamily,
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        lineHeight = 21.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+
+                    Text(
+                        text = stringResource(id = R.string.see_more),
+                        fontFamily = poppinsFamily,
+                        fontSize = 16.sp,
+                        color = colorResource(id = R.color.light_blue),
+                        lineHeight = 21.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+
+                LazyRow(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(10) {
+                        ProductCard()
+                    }
+                }
+                Spacer(modifier = modifier.size(16.dp))
+            }
+            item {
+                Image(
+                    painter = painterResource(id = R.drawable.shoes_img),
+                    contentDescription = "Scroll image",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .size(width = 390.dp, height = 220.dp)
+                )
+                Spacer(modifier = modifier.size(16.dp))
+            }
+            item {
+                Spacer(modifier = modifier.size(16.dp))
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(600.dp)
+                        .padding(16.dp)
+                ) {
+                    items(10) {
+                        ProductCard(modifier = Modifier.padding(8.dp))
                     }
                 }
             }
