@@ -36,7 +36,6 @@ fun AppNavigation() {
         BottomNavItem("Account", R.drawable.profile_nav_ic)
     )
 
-    // Get the index of the selected item
     val selectedItemIndex = bottomNavItems.indexOfFirst { it.label.lowercase() in (currentRoute ?: "") }
 
     Scaffold(
